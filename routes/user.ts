@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const withAuth = require('./middleware');
 const { appSecret } = require('../config/keys');
 
-const secret = appSecret;
+const secret: string = appSecret;
 
 const user = (app: Router) => {
     app.get('/home', function(req: Request, res: Response) {
@@ -13,7 +13,7 @@ const user = (app: Router) => {
     });
       
     app.get('/user/profile', withAuth, async function(req: Request, res: Response) {
-        const token = 
+        const token: string = 
             req.body.token ||
             req.query.token ||
             req.headers['x-access-token'] ||
@@ -21,7 +21,7 @@ const user = (app: Router) => {
         
         const decoded: any = jwt.verify(token, appSecret);
 
-        User.findById(decoded.id, function(err: string, user: any) {
+        User.findById(decoded.id, function(err: any, user: any) {
             return res.status(200).json({
                 email: user.email,
                 password: user.password
@@ -29,9 +29,9 @@ const user = (app: Router) => {
         })
     });
       
-    app.post('/user/register', function(req, res) {
-        const { email, password } = req.body;
-        const user = new User({ email, password });
+    app.post('/user/register', function(req: Request, res: Response) {
+        const { username, email, password } = req.body;
+        const user: any = new User({ username, email, password, bio: 'No Bio', shared: 0 });
         user.save(function(err: any) {
             if (err) {
             console.log(err);
@@ -42,7 +42,7 @@ const user = (app: Router) => {
         });
     });
       
-    app.post('/user/login', function(req, res) {
+    app.post('/user/login', function(req: Request, res: Response) {
         const { email, password } = req.body;
         User.findOne({ email }, function(err: any, user: any) {
             if (err) {
@@ -57,7 +57,7 @@ const user = (app: Router) => {
                 error: 'Incorrect email or password'
             });
             } else {
-            user.isCorrectPassword(password, function(err: any, same: any) {
+            user.isCorrectPassword(password, function(err: any, same: boolean) {
                 if (err) {
                 res.status(500)
                     .json({
@@ -70,11 +70,11 @@ const user = (app: Router) => {
                 });
                 } else {
                 // Issue token
-                const payload = {
+                const payload: object = {
                     id: user._id,
                     email,
                 };
-                const token = jwt.sign(payload, secret, {
+                const token: string = jwt.sign(payload, secret, {
                     expiresIn: '7d'
                 });
                 res.cookie('token', token, { httpOnly: true }).sendStatus(200);
@@ -84,9 +84,9 @@ const user = (app: Router) => {
         });
     });
 
-    app.patch('/user/update', withAuth, async (req, res) => {
+    app.patch('/user/update', withAuth, async (req: Request, res: Response) => {
         const { email, password } = req.body;
-        const token = 
+        const token: string = 
             req.body.token ||
             req.query.token ||
             req.headers['x-access-token'] ||
@@ -104,11 +104,11 @@ const user = (app: Router) => {
         return res.status(200).send("Updated!");
     })
 
-    app.get('/user/logout', function(req, res) {
+    app.get('/user/logout', function(req: Request, res: Response) {
         res.cookie('token', "", { httpOnly: true }).sendStatus(200);
     });
       
-    app.get('/checkToken', withAuth, function(req, res) {
+    app.get('/checkToken', withAuth, function(req: Request, res: Response) {
         res.sendStatus(200);
     });
 };

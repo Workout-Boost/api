@@ -4,7 +4,7 @@ const { appSecret } = require('../config/keys');
 const secret = appSecret;
 
 const withAuth = function(req: any, res: Response, next: NextFunction) {
-  const token = 
+  const token: string = 
       req.body.token ||
       req.query.token ||
       req.headers['x-access-token'] ||
