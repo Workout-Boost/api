@@ -5,8 +5,10 @@ const db = async () => {
     try {
         await mongoose.connect(
             database,
-            { useUnifiedTopology: true },
-            { useNewUrlParser: true },
+            { 
+                useNewUrlParser: true, 
+                useUnifiedTopology: true 
+            },
             () => console.log('[CONNECTED] - Database'))
     } catch (err: any | unknown) {
         console.log(`Error: ${err}`)
