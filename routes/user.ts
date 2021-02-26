@@ -1,6 +1,6 @@
 import { Router, Request, Response} from 'express'
-import User from '../models/User'
 import jwt from 'jsonwebtoken'
+import User from '../models/User'
 const bcrypt = require('bcryptjs');
 const withAuth = require('./middleware');
 const { appSecret } = require('../config/keys');

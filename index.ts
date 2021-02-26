@@ -6,12 +6,18 @@ const path = require('path');
 const cors = require('cors')
 const fs = require('fs')
 const PORT: number = 8080
-
+// All the setup for api
 const app: express.Application = express();
 // Initializes the database
 db();
-
-app.use(cors());
+const corsOptions = {
+  origin: [
+    "http://localhost:3000"
+  ],
+  credentials: true,
+  exposedHeaders: ["token"]
+}
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
