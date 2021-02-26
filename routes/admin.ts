@@ -3,12 +3,12 @@ import User from '../models/User'
 
 const admin = (app: Router) => {
     // Get all users 
-    app.get('/admin/users', async function(req: Request, res: Response) {
+    app.get('/admin/users', async (req: Request, res: Response) => {
         try {
             const users: object = await User.find();
             res.json(users)
         } catch (err) {
-            res.send(`Error ${err}`)
+            res.status(500).send('Internal Error, Please try again')
         }
     });
     // Delete user
@@ -18,7 +18,7 @@ const admin = (app: Router) => {
             const users: object = await User.find();
             res.json(users)
         } catch (err) {
-            res.send(`Error ${err}`)
+            res.status(500).send('Internal Error, Please try again')
         }
     })
 };
