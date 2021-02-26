@@ -129,4 +129,4 @@ const posts = (app: Router) => {
     })
 };
 
-module.exports = posts;
+export = posts;
