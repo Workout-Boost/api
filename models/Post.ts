@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 // Defining Post Model
 const PostSchema = mongoose.Schema({
-    title: {
+    username: {
         type: String,
         required: true
     },

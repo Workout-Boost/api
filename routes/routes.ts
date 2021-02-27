@@ -1,5 +1,8 @@
 import { Router, Request, Response} from 'express'
 const user = require('./user');
+const post = require('./post');
+const saved = require('./saved');
+const admin = require('./admin')
 
 const appRouter: any = (app: Router, fs: any) => {
     app.get('/', (req: Request, res: Response) => {
@@ -8,6 +11,9 @@ const appRouter: any = (app: Router, fs: any) => {
     })
     // Routes
     user(app);
+    post(app);
+    saved(app);
+    admin(app);
 }
 
 export = appRouter;

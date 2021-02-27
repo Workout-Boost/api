@@ -35,7 +35,7 @@ const user = (app: Router) => {
         user.save(function(err: any) {
             if (err) {
             console.log(err);
-            res.status(500).send("A user already exists with this email");
+            res.status(500).send("A user already exists with this email or username");
             } else {
             res.status(200).send("Registered!");
             }
@@ -64,6 +64,7 @@ const user = (app: Router) => {
                 // Issue token
                 const payload: object = {
                     id: user._id,
+                    username: user.username,
                     email,
                 };
                 const token: string = jwt.sign(payload, secret, {
@@ -99,7 +100,7 @@ const user = (app: Router) => {
         }
     })
     // Get User Id
-    app.get('/user/getUid', async (req: Request, res: Response) => {
+    app.get('/user/getUserInfo', async (req: Request, res: Response) => {
         const token: string = 
             req.body.token ||
             req.query.token ||
@@ -108,7 +109,10 @@ const user = (app: Router) => {
 
         if (token) {
             const decoded: any = jwt.verify(token, appSecret);
-            return res.send(decoded.id);
+            return res.json({
+                userId: decoded.id,
+                username: decoded.username
+            });
         } else {
             return res.send(null)
         }

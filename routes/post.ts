@@ -28,7 +28,7 @@ const posts = (app: Router) => {
         const decoded: any = jwt.verify(token, appSecret);
 
         const post: object | any = new Post({
-            title: req.body.title,
+            username: decoded.username,
             description: req.body.description,
             comments: [],
             postUid: decoded.id,
@@ -38,6 +38,7 @@ const posts = (app: Router) => {
             await post.save();
             findPosts(req, res);
         } catch (error) {
+            console.log(error)
             res.status(500).send('Internal Error, Please try again')
         }
     });
@@ -65,7 +66,7 @@ const posts = (app: Router) => {
         try {
             const updatedPost: object = await Post.updateOne(
                 {_id:req.params.postId},
-                {$set: {title:req.body.title}}
+                {$set: {title:req.body.description}}
             );
             res.json(updatedPost);
         } catch (err) {
