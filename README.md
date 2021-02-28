@@ -1,11 +1,22 @@
 # Workout Boost | API
 > REST API - Typescript, Express, Mongodb
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Quick Start](#Quick-Start)
+- [Developer](#developer)
+
+## Installation
+
+```sh
+git pull https://github.com/Workout-Boost/api.git
+cd api
+npm install
+```
+
 ## Quick Start
 ```
-# Install dependencies
-npm install
-
 # Start Development
 npm run dev
 
@@ -14,11 +25,16 @@ npm run build
 
 # Start API
 npm run start
-```
+
 ### Make a keys.ts in /config
-```
+
 module.exports = {
     database: "MONGO DB KEY FOR CONFIG",
     appSecret: "APP SECRET (anything you want)"
 }
 ```
+
+## Developer
+
+* [BenReichwein](https://github.com/BenReichwein)
+
