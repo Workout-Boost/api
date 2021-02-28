@@ -38,7 +38,6 @@ const posts = (app: Router) => {
             await post.save();
             findPosts(req, res);
         } catch (error) {
-            console.log(error)
             res.status(500).send('Internal Error, Please try again')
         }
     });
@@ -89,6 +88,7 @@ const posts = (app: Router) => {
                 { $push: {
                     comments: {
                         commentUid: decoded.id,
+                        username: decoded.username,
                         postUid: req.body.postUid,
                         postId: req.body.postId,
                         comment: req.body.comment
