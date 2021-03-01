@@ -56,7 +56,7 @@ const user = (app: Router) => {
                 .send('Internal error please try again');
             } else if (!user) {
             res.status(401)
-                .send('Incorrect email or password');
+                .send('There is no user with that email');
             } else {
             user.isCorrectPassword(password, function(err: any, same: boolean) {
                 if (err) {

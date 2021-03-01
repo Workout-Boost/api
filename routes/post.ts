@@ -1,5 +1,6 @@
 import { Router, Request, Response} from 'express'
 import jwt from 'jsonwebtoken'
+const Meta = require('html-metadata-parser')
 import Post from '../models/Post'
 import User from '../models/User'
 const withAuth = require('./middleware');
@@ -28,9 +29,17 @@ const posts = (app: Router) => {
 
         const decoded: any = jwt.verify(token, appSecret);
 
+        let expression = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/gi;
+        let link = req.body.description.match(expression);
+
+        let result: object | any = await Meta.parser(link[0]);
+
+        let description = req.body.description.replace(link[0], '<a href="' + link[0] + '">' + link[0] + '</a>')
+
         const post: object | any = new Post({
             username: decoded.username,
-            description: req.body.description,
+            description,
+            image: result.og.image,
             comments: [],
             postUid: decoded.id,
         });
