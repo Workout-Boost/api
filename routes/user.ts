@@ -23,15 +23,20 @@ const user = (app: Router) => {
 
         User.findById(decoded.id, function(err: any, user: any) {
             return res.status(200).json({
+                username: user.username,
                 email: user.email,
-                password: user.password
+                password: user.password,
+                bio: user.bio,
+                id: user._id,
+                shared: user.shared,
+                savedByOthers: user.savedByOthers
             });
         })
     });
     // Register user
     app.post('/user/register', function(req: Request, res: Response) {
         const { username, email, password } = req.body;
-        const user: any = new User({ username, email, password, bio: 'No Bio', shared: 0 });
+        const user: any = new User({ username, email, password, bio: 'No Bio', shared: 0, saved: [], savedByOthers: 0 });
         user.save(function(err: any) {
             if (err) {
             console.log(err);
@@ -78,7 +83,7 @@ const user = (app: Router) => {
     });
     // Update User
     app.patch('/user/update', withAuth, async (req: Request, res: Response) => {
-        const { email, password } = req.body;
+        const { username, email, password, bio } = req.body;
         const token: string = 
             req.body.token ||
             req.query.token ||
@@ -89,8 +94,10 @@ const user = (app: Router) => {
 
         const updateQuery: any = {};
 
+        if (username) updateQuery.username = username;
         if (email) updateQuery.email = email;
         if (password) updateQuery.password = await bcrypt.hash(password, 10);
+        if (bio) updateQuery.bio = bio;
 
         await User.findByIdAndUpdate(decoded.id, updateQuery);
         try {

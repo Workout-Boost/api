@@ -17,13 +17,18 @@ const saved = (app: Router) => {
         const decoded: any = jwt.verify(token, appSecret);
 
         try {
+            // Save to user
             await User.updateOne(
                 { _id : decoded.id},
                 { $push: {
                     saved: req.body.postId
                 }
             }).exec();
-    
+            // Add SavedByOther to post user
+            await User.updateOne(
+                { _id: req.body.postUid },
+                { $inc: { savedByOthers: 1} }
+            )
             res.status(200).send('Added to [SAVED]')
         } catch (error) {
             res.status(500).send('Internal Error, Please try again')

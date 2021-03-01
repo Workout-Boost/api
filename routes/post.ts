@@ -1,6 +1,7 @@
 import { Router, Request, Response} from 'express'
 import jwt from 'jsonwebtoken'
 import Post from '../models/Post'
+import User from '../models/User'
 const withAuth = require('./middleware');
 const { appSecret } = require('../config/keys');
 // Post endpoints => anything related to posting
@@ -36,6 +37,10 @@ const posts = (app: Router) => {
 
         try {
             await post.save();
+            await User.updateOne(
+                { _id: decoded.id },
+                { $inc: { shared: 1} }
+            )
             findPosts(req, res);
         } catch (error) {
             res.status(500).send('Internal Error, Please try again')
@@ -53,8 +58,20 @@ const posts = (app: Router) => {
     })
     // Delete post
     app.delete('/posts/:postId', async (req: Request, res: Response) => {
+        const token: string = 
+            req.body.token ||
+            req.query.token ||
+            req.headers['x-access-token'] ||
+            req.cookies.token;
+
+        const decoded: any = jwt.verify(token, appSecret);
+
         try {
             await Post.deleteOne({_id: req.params.postId});
+            await User.updateOne(
+                { _id: decoded.id },
+                { $inc: { shared: -1} }
+            )
             findPosts(req, res);
         } catch (error) {
             res.status(500).send('Internal Error, Please try again')

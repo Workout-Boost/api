@@ -9,8 +9,8 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   bio: { type: String, required: true },
   saved: { type: Array },
+  savedByOthers: { type: Number },
   shared: { type: Number },
-  theme: { type: String },
   createdAt: {
     type: Date,
     default: Date.now()
