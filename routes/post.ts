@@ -32,14 +32,20 @@ const posts = (app: Router) => {
         let expression = /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/gi;
         let link = req.body.description.match(expression);
 
-        let result: object | any = await Meta.parser(link[0]);
+        let image: any | undefined;
+        let description: string = req.body.description;
 
-        let description = req.body.description.replace(link[0], '<a href="' + link[0] + '">' + link[0] + '</a>')
+        if (link) {
+            image = await Meta.parser(link[0]);
+            image = image.og.image
+
+            description = req.body.description.replace(link[0], '<a href="' + link[0] + '">' + link[0] + '</a>')   
+        }
 
         const post: object | any = new Post({
             username: decoded.username,
             description,
-            image: result.og.image,
+            image,
             comments: [],
             postUid: decoded.id,
         });
@@ -55,13 +61,27 @@ const posts = (app: Router) => {
             res.status(500).send('Internal Error, Please try again')
         }
     });
-    // Specific post
-    app.get('/posts/:postId', async (req: Request, res: Response) => {
+    // Find all post in a category
+    app.get('/posts/category/:category', async (req: Request, res: Response) => {
+        let keywords = [/a/, /the/];
+        if (req.params.category === "Upper")
+            keywords = [/chest/, /shoulders/, /torso/, /biceps/, /triceps/, /abs/, /core/, /arms/, /upper/, 
+                        /Chest/, /Shoulders/, /Torso/, /Biceps/, /Triceps/, /Abs/, /Core/, /Arms/, /Upper/]
+        if (req.params.category === "Lower")
+            keywords = [/quads/, /thighs/, /calves/, /calfs/, /running/, /lower/, 
+                        /Quads/, /Thighs/, /Calves/, /Calfs/, /Running/, /Lower/]
+        if (req.params.category === "Nutrition")
+            keywords = [/health/, /smoothies/, /food/, /nutrition/, 
+                        /Health/, /Smoothies/, /Food/, /Nutrition/]
         try {
-            const post: object = await Post.findById(req.params.postId)
+            Post.find({ description: {$in: keywords }})
             .sort({createdAt: 'desc'})
-            res.status(200).json(post)
-        } catch (err) {
+            .then(
+                (resp: object)=> {
+                    res.status(200).json(resp)
+                }
+            )
+        } catch (error) {
             res.status(500).send('Internal Error, Please try again')
         }
     })
