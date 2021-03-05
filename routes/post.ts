@@ -62,17 +62,15 @@ const posts = (app: Router) => {
         }
     });
     // Find all post in a category
-    app.get('/posts/category/:category', async (req: Request, res: Response) => {
-        let keywords = [/a/, /the/];
-        if (req.params.category === "Upper")
-            keywords = [/chest/, /shoulders/, /torso/, /biceps/, /triceps/, /abs/, /core/, /arms/, /upper/, 
-                        /Chest/, /Shoulders/, /Torso/, /Biceps/, /Triceps/, /Abs/, /Core/, /Arms/, /Upper/]
-        if (req.params.category === "Lower")
-            keywords = [/quads/, /thighs/, /calves/, /calfs/, /running/, /lower/, 
-                        /Quads/, /Thighs/, /Calves/, /Calfs/, /Running/, /Lower/]
-        if (req.params.category === "Nutrition")
-            keywords = [/health/, /smoothies/, /food/, /nutrition/, 
-                        /Health/, /Smoothies/, /Food/, /Nutrition/]
+    app.get('/posts/keyword/:keyword', async (req: Request, res: Response) => {
+        let keywords = new RegExp(req.params.keyword);
+        if (req.params.keyword === "Upper")
+            keywords = /chest|shoulder|upper|Chest|Shoulder|Upper/
+        if (req.params.keyword === "Lower")
+            keywords = /quads|thighs|Quads|Thighs|lower|Lower/
+        if (req.params.keyword === "Nutrition")
+            keywords = /health|smoothies|Health|Smoothies|nutrition|Nutrition/
+
         try {
             Post.find({ description: {$in: keywords }})
             .sort({createdAt: 'desc'})
@@ -141,7 +139,6 @@ const posts = (app: Router) => {
                     }
                 }
             }).exec();
-            findPosts(req, res);
         } catch (error) {
             res.status(500).send('Internal Error, Please try again')
         }
@@ -159,7 +156,6 @@ const posts = (app: Router) => {
                     }
                 }
             }).exec();
-            findPosts(req, res);
         } catch (error) {
             res.status(500).send('Internal Error, Please try again')
         }
@@ -167,9 +163,15 @@ const posts = (app: Router) => {
     // Get Users Posts
     app.get('/userPosts/:userId', async (req: Request, res: Response) => {
         try {
-            const post: object = await Post.find({ postUid: req.params.userId })
-            .sort({createdAt: 'desc'});
-            res.status(200).json(post)
+            User.findById(req.params.userId, async function(err: any, user: any) {
+                const post: object = await Post.find({ postUid: req.params.userId })
+                .sort({createdAt: 'desc'});
+                return res.status(200).json({
+                    post,
+                    username: user.username,
+                    bio: user.bio,
+                });
+            })
         } catch (err) {
             res.status(500).send('Internal Error, Please try again')
         }

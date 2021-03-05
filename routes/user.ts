@@ -40,7 +40,7 @@ const user = (app: Router) => {
         user.save(function(err: any) {
             if (err) {
             console.log(err);
-            res.status(500).send("A user already exists with this email or username");
+            res.status(500).send("A user already exists with this username or email");
             } else {
             res.status(200).send("Registered!");
             }
