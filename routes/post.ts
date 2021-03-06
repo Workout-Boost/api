@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 const Meta = require('html-metadata-parser')
 import Post from '../models/Post'
 import User from '../models/User'
-const withAuth = require('./middleware');
+const {withAuth} = require('./middleware');
 const { appSecret } = require('../config/keys');
 // Post endpoints => anything related to posting
 const posts = (app: Router) => {

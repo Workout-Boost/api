@@ -2,7 +2,7 @@ import { Router, Request, Response} from 'express'
 import jwt from 'jsonwebtoken'
 import Post from '../models/Post'
 import User from '../models/User'
-const withAuth = require('./middleware');
+const {withAuth} = require('./middleware');
 const { appSecret } = require('../config/keys');
 
 const saved = (app: Router) => {
