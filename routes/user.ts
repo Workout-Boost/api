@@ -37,14 +37,18 @@ const user = (app: Router) => {
     app.post('/user/register', function(req: Request, res: Response) {
         const { username, email, password } = req.body;
         const user: any = new User({ username, email, password, bio: 'No Bio', shared: 0, saved: [], savedByOthers: 0 });
-        user.save(function(err: any) {
-            if (err) {
-            console.log(err);
-            res.status(500).send("A user already exists with this username or email");
-            } else {
-            res.status(200).send("Registered!");
-            }
-        });
+        if (username.match(/[!-\/:-@[-`{-~]/)) {
+            user.save(function(err: any) {
+                if (err) {
+                console.log(err);
+                res.status(500).send("A user already exists with this username or email");
+                } else {
+                res.status(200).send("Registered!");
+                }
+            });
+        } else {
+            res.status(406).send("Please do not include special characters in username")
+        }
     });
     // User Login
     app.post('/user/login', function(req: Request, res: Response) {
