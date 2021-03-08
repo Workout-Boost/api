@@ -26,8 +26,6 @@ const admin = (app: Router) => {
             updateQuery[category] = input;
         }
 
-        console.log(updateQuery)
-
         try {
             await User.findByIdAndUpdate(req.params.userId, updateQuery);
             return res.status(200).send("Updated!");

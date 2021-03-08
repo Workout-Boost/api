@@ -169,6 +169,7 @@ const posts = (app: Router) => {
                 .sort({createdAt: 'desc'});
                 return res.status(200).json({
                     post,
+                    avatar: user.avatar,
                     username: user.username,
                     bio: user.bio,
                 });
