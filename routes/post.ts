@@ -44,12 +44,13 @@ const posts = (app: Router) => {
 
         const post: object | any = new Post({
             username: decoded.username,
+            avatar: decoded.avatar,
             description,
             image,
             comments: [],
             postUid: decoded.id,
         });
-
+        
         try {
             await post.save();
             await User.updateOne(
