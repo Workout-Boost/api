@@ -115,8 +115,8 @@ const user = (app: Router) => {
             res.status(406).send("Bio must be less then 100 characters")
         } 
         else {
-            await User.findByIdAndUpdate(decoded.id, updateQuery);
             try {
+                await User.findByIdAndUpdate(decoded.id, updateQuery);
                 return res.status(200).send("Updated!");
             } catch (error) {
                 return res.status(500).send('Internal Error, Please try again')

@@ -1,4 +1,5 @@
 import { Router, Request, Response} from 'express'
+const bcrypt = require('bcryptjs');
 const {isAdmin} = require('./middleware');
 import User from '../models/User'
 import Post from '../models/Post'
@@ -13,6 +14,27 @@ const admin = (app: Router) => {
             res.status(500).send('Internal Error, Please try again')
         }
     });
+    // Update User
+    app.patch('/admin/user/update/:userId', async (req: Request, res: Response) => {
+        const { category, input } = req.body;
+
+        const updateQuery: any = {};
+
+        if (category === "password") {
+            updateQuery.password = await bcrypt.hash(input, 10);
+        } else {
+            updateQuery[category] = input;
+        }
+
+        console.log(updateQuery)
+
+        try {
+            await User.findByIdAndUpdate(req.params.userId, updateQuery);
+            return res.status(200).send("Updated!");
+        } catch (error) {
+            return res.status(500).send('Internal Error, Please try again')
+        }
+    })
     // Delete user
     app.delete('/admin/:userId', async (req: Request, res: Response) => {
         try {
