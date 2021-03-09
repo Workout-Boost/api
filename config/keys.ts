@@ -1,5 +1,5 @@
 module.exports = {
-    database: $secrets.DATABASE,
-    appSecret: $secrets.APPSECRET,
-    emailPassword: $secrets.EMAILPASSWORD
+    database: process.env.DATABASE,
+    appSecret: process.env.APPSECRET,
+    emailPassword: process.env.EMAILPASSWORD
 }
