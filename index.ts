@@ -13,7 +13,8 @@ db();
 
 const corsOptions = {
   origin: [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://workoutboost.net"
   ],
   credentials: true,
   exposedHeaders: ["token"]
