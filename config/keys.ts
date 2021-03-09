@@ -1,7 +1,14 @@
-const { database, appSecret, emailPassword } = require('./dev');
-
-module.exports = {
-    database: process.env.DATABASE || database,
-    appSecret: process.env.APPSECRET || appSecret,
-    emailPassword: process.env.EMAILPASSWORD || emailPassword
+if (!process.env.DATABASE) {
+    const { database, appSecret, emailPassword } = require('./dev');
+    module.exports = {
+        database,
+        appSecret,
+        emailPassword
+    }
+} else {
+    module.exports = {
+        database: process.env.DATABASE,
+        appSecret: process.env.APPSECRET,
+        emailPassword: process.env.EMAILPASSWORD
+    }
 }
