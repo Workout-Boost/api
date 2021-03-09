@@ -87,6 +87,7 @@ const user = (app: Router) => {
             console.error(err);
             res.status(500)
                 .send('Internal error please try again');
+                console.log(err)
             } else if (!user) {
             res.status(401)
                 .send('There is no user with that email');
@@ -95,6 +96,7 @@ const user = (app: Router) => {
                 if (err) {
                 res.status(500)
                     .send('Internal error please try again');
+                    console.log(err)
                 } else if (!same) {
                 res.status(401)
                     .send('Incorrect email or password');
