@@ -8,7 +8,6 @@ const db = async () => {
             { 
                 useCreateIndex: true,
                 useNewUrlParser: true,
-                useUnifiedTopology: true,
             },
             () => console.log('[CONNECTED] - Database'))
     } catch (err: any | unknown) {
