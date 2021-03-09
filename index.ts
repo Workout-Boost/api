@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const cors = require('cors')
 const fs = require('fs')
-const PORT: number = 8080
+const PORT: any = process.env.PORT || 8080
 // All the setup for api
 const app: express.Application = express();
 // Initializes the database
