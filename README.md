@@ -26,11 +26,12 @@ npm run build
 # Start API
 npm run start
 
-### Make a keys.ts in /config
+### Make a dev.ts in /config
 
 module.exports = {
     database: "MONGO DB KEY FOR CONFIG",
-    appSecret: "APP SECRET (anything you want)"
+    appSecret: "APP SECRET (anything you want)",
+    emailPassword: "Email password for a less secure gmail"
 }
 ```
 
