@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema({
   saved: { type: Array },
   savedByOthers: { type: Number },
   shared: { type: Number },
+  isVerified: { type: Boolean},
   createdAt: {
     type: Date,
     default: Date.now()

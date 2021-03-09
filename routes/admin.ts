@@ -22,6 +22,11 @@ const admin = (app: Router) => {
 
         if (category === "password") {
             updateQuery.password = await bcrypt.hash(input, 10);
+        } else if (category === "verified") {
+            if (input === "true")
+            updateQuery.isVerified = true
+            if (input === "false")
+            updateQuery.isVerified = false
         } else {
             updateQuery[category] = input;
         }

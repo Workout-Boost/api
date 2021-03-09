@@ -42,25 +42,31 @@ const posts = (app: Router) => {
             description = req.body.description.replace(link[0], '<a href="' + link[0] + '">' + link[0] + '</a>')   
         }
 
-        const post: object | any = new Post({
-            username: decoded.username,
-            avatar: decoded.avatar,
-            description,
-            image,
-            comments: [],
-            postUid: decoded.id,
-        });
-        
-        try {
-            await post.save();
-            await User.updateOne(
-                { _id: decoded.id },
-                { $inc: { shared: 1} }
-            )
-            findPosts(req, res);
-        } catch (error) {
-            res.status(500).send('Internal Error, Please try again')
-        }
+        User.findOne({ _id: decoded.id }, async function(err: any, user: any) {
+            if (user.isVerified === true) {
+                const post: object | any = new Post({
+                    username: user.username,
+                    avatar: user.avatar,
+                    description,
+                    image,
+                    comments: [],
+                    postUid: decoded.id,
+                });
+    
+                try {
+                    await post.save();
+                    await User.updateOne(
+                        { _id: decoded.id },
+                        { $inc: { shared: 1} }
+                    )
+                    findPosts(req, res);
+                } catch (error) {
+                    res.status(500).send('Internal Error, Please try again')
+                }
+            } else {
+                res.status(401).send("You can't post yet! \nclick link attached to verification email sent to you")
+            }
+        })
     });
     // Find all post in a category
     app.get('/posts/keyword/:keyword', async (req: Request, res: Response) => {
@@ -127,22 +133,29 @@ const posts = (app: Router) => {
         
         const decoded: any = jwt.verify(token, appSecret);
 
-        try {
-            Post.updateOne(
-                { _id : req.params.postId},
-                { $push: {
-                    comments: {
-                        commentUid: decoded.id,
-                        username: decoded.username,
-                        postUid: req.body.postUid,
-                        postId: req.body.postId,
-                        comment: req.body.comment
-                    }
+        User.findOne({ _id: decoded.id }, async function(err: any, user: any) {
+            if (user.isVerified === true) {
+                try {
+                    Post.updateOne(
+                        { _id : req.params.postId},
+                        { $push: {
+                            comments: {
+                                commentUid: decoded.id,
+                                username: decoded.username,
+                                postUid: req.body.postUid,
+                                postId: req.body.postId,
+                                comment: req.body.comment
+                            }
+                        }
+                    }).exec();
+                    res.status(200).send('Comment Posted')
+                } catch (error) {
+                    res.status(500).send('Internal Error, Please try again')
                 }
-            }).exec();
-        } catch (error) {
-            res.status(500).send('Internal Error, Please try again')
-        }
+            } else {
+                res.status(401).send("You can't comment yet! \nclick link attached to verification email sent to you")
+            }
+        })
     })
     // Delete Comment
     app.delete('/posts/comment/:postId', withAuth, async (req: Request, res: Response) => {
@@ -157,6 +170,7 @@ const posts = (app: Router) => {
                     }
                 }
             }).exec();
+            res.status(200).send('Comment Deleted')
         } catch (error) {
             res.status(500).send('Internal Error, Please try again')
         }
