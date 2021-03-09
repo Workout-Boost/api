@@ -10,6 +10,7 @@ const PORT: any = process.env.PORT || 8080
 const app: express.Application = express();
 // Initializes the database
 db();
+console.log(process.env.DATABASE)
 const corsOptions = {
   origin: [
     "http://localhost:3000"
