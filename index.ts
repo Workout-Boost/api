@@ -2,6 +2,7 @@ import express, { Request, Response} from 'express'
 import db from './config/db'
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const cookiesMiddleware = require('universal-cookie-express');
 const path = require('path');
 const cors = require('cors')
 const fs = require('fs')
@@ -20,6 +21,7 @@ const corsOptions = {
   allowedHeaders: ["Content-Type","Authorization","X-Requested-With","X-Forwarded-Proto", "Cookie","Set-Cookie"],
   exposedHeaders: ["Content-Type","Authorization","X-Requested-With","X-Forwarded-Proto","Cookie","Set-Cookie"],
 }
+app.use(cookiesMiddleware());
 app.set("trust proxy", "uniquelocal");
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));

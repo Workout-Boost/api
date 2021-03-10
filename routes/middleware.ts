@@ -8,6 +8,7 @@ export const withAuth = function(req: any, res: Response, next: NextFunction) {
   const cookies = new Cookies(req.headers.cookie);
   const token: string = cookies.get('token')
 
+  console.log(token)
   if (!token) {
     res.status(401).send('Unauthorized: No token provided');
   } else {
