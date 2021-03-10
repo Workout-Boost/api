@@ -21,11 +21,7 @@ const posts = (app: Router) => {
     });
     // Submits a post - Needs to be req.json to submit
     app.post('/posts', withAuth, async (req: Request, res: Response) => {
-        const token: string = 
-            req.body.token ||
-            req.query.token ||
-            req.headers['x-access-token'] ||
-            req.cookies.token;
+        const token: any = req.query.token;
 
         const decoded: any = jwt.verify(token, appSecret);
 
@@ -92,11 +88,7 @@ const posts = (app: Router) => {
     })
     // Delete post
     app.delete('/posts/:postId', async (req: Request, res: Response) => {
-        const token: string = 
-            req.body.token ||
-            req.query.token ||
-            req.headers['x-access-token'] ||
-            req.cookies.token;
+        const token: any = req.query.token;
 
         const decoded: any = jwt.verify(token, appSecret);
 
@@ -125,11 +117,7 @@ const posts = (app: Router) => {
     })
     // Post Comment
     app.post('/posts/comment/:postId', withAuth, async (req: Request, res: Response) => {
-        const token: string = 
-            req.body.token ||
-            req.query.token ||
-            req.headers['x-access-token'] ||
-            req.cookies.token;  
+        const token: any = req.query.token;
         
         const decoded: any = jwt.verify(token, appSecret);
 

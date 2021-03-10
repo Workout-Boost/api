@@ -8,11 +8,7 @@ const { appSecret } = require('../config/keys');
 const saved = (app: Router) => {
     // Add Saved post to user
     app.post('/saved', withAuth, async (req: Request, res: Response) => {
-        const token: string = 
-            req.body.token ||
-            req.query.token ||
-            req.headers['x-access-token'] ||
-            req.cookies.token;  
+        const token: any = req.query.token;
         
         const decoded: any = jwt.verify(token, appSecret);
 
@@ -36,11 +32,7 @@ const saved = (app: Router) => {
     })
     // Get Saved Posts from a user
     app.get('/saved', withAuth, async (req: Request, res: Response) => {
-        const token: string = 
-            req.body.token ||
-            req.query.token ||
-            req.headers['x-access-token'] ||
-            req.cookies.token;  
+        const token: any = req.query.token;
         
         const decoded: any = jwt.verify(token, appSecret);
 
@@ -60,11 +52,7 @@ const saved = (app: Router) => {
     })
     // Delete Saved
     app.delete('/saved/:postId', withAuth, async (req: Request, res: Response) => {
-        const token: string = 
-            req.body.token ||
-            req.query.token ||
-            req.headers['x-access-token'] ||
-            req.cookies.token;  
+        const token: any = req.query.token; 
         
         const decoded: any = jwt.verify(token, appSecret);
 

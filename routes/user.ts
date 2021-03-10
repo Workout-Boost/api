@@ -14,11 +14,7 @@ const user = (app: Router) => {
     });
     // Get user profile
     app.get('/user/profile', withAuth, async function(req: Request, res: Response) {
-        const token: string = 
-            req.body.token ||
-            req.query.token ||
-            req.headers['x-access-token'] ||
-            req.cookies.token;  
+        const token: any = req.query.token;
         
         const decoded: any = jwt.verify(token, appSecret);
 
@@ -120,11 +116,7 @@ const user = (app: Router) => {
     // Update User
     app.patch('/user/update', withAuth, async (req: Request, res: Response) => {
         const { username, email, password, bio } = req.body;
-        const token: string = 
-            req.body.token ||
-            req.query.token ||
-            req.headers['x-access-token'] ||
-            req.cookies.token;  
+        const token: any = req.query.token;
         
         const decoded: any = jwt.verify(token, appSecret);
 
@@ -168,11 +160,7 @@ const user = (app: Router) => {
     })
     // Get User Id
     app.get('/user/getUserInfo', async (req: Request, res: Response) => {
-        const token: string = 
-            req.body.token ||
-            req.query.token ||
-            req.headers['x-access-token'] ||
-            req.cookies.token;  
+        const token: any = req.query.token;
 
         if (token) {
             const decoded: any = jwt.verify(token, appSecret);
@@ -186,8 +174,7 @@ const user = (app: Router) => {
         }
     })
     // Check token with middleware
-    app.post('/checkToken', withAuth, function(req: Request, res: Response) {
-        req.body.token;
+    app.get('/checkToken', withAuth, function(req: Request, res: Response) {
         res.sendStatus(200);
     });
 };
