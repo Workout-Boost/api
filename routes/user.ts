@@ -186,7 +186,8 @@ const user = (app: Router) => {
         }
     })
     // Check token with middleware
-    app.get('/checkToken', withAuth, function(req: Request, res: Response) {
+    app.post('/checkToken', withAuth, function(req: Request, res: Response) {
+        req.body.token;
         res.sendStatus(200);
     });
 };

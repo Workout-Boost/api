@@ -4,7 +4,7 @@ const { appSecret } = require('../config/keys');
 const secret = appSecret;
 
 export const withAuth = function(req: any, res: Response, next: NextFunction) {
-  const token: string = req.cookies.token;
+  const token: string = req.cookies.token || req.body.token;
   console.log(req.cookies)
   console.log(req)
   console.log(req.headers)
