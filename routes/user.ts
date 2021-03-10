@@ -109,9 +109,9 @@ const user = (app: Router) => {
                     email,
                 };
                 const token: string = jwt.sign(payload, secret, {
-                    expiresIn: '7d'
+                    expiresIn: '200d'
                 });
-                res.cookie('token', token, { httpOnly: true, secure: true}).sendStatus(200);
+                res.status(200).send(token);
                 }
             });
             }
@@ -185,10 +185,6 @@ const user = (app: Router) => {
             return res.send(null)
         }
     })
-    // Logs out user
-    app.get('/user/logout', function(req: Request, res: Response) {
-        res.cookie('token', "", { httpOnly: true }).sendStatus(200);
-    });
     // Check token with middleware
     app.get('/checkToken', withAuth, function(req: Request, res: Response) {
         res.sendStatus(200);
