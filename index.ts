@@ -17,10 +17,18 @@ const corsOptions = {
     "https://workoutboost.net"
   ],
   credentials: true,
-  allowedHeaders: ["Content-Type","Authorization","X-Requested-With","X-Forwarded-Proto", "Cookie","Set-Cookie"],
-  exposedHeaders: ["Content-Type","Authorization","X-Requested-With","X-Forwarded-Proto","Cookie","Set-Cookie"],
+  allowedHeaders: '*',
+  exposedHeaders: '*',
 }
 app.set('trust proxy', 1)
+app.options('*', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.send('ok');
+});
+
+app.use((req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+});
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
