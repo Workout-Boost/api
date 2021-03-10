@@ -18,8 +18,8 @@ const corsOptions = {
     "https://workoutboost.net"
   ],
   credentials: true,
-  allowedHeaders: '*',
-  exposedHeaders: '*',
+  allowedHeaders: ["Content-Type","Authorization","X-Requested-With","X-Forwarded-Proto", "Cookie","Set-Cookie"],
+  exposedHeaders: ["Content-Type","Authorization","X-Requested-With","X-Forwarded-Proto","Cookie","Set-Cookie"],
 }
 app.set('trust proxy', 1)
 app.use(
