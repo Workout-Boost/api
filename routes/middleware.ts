@@ -12,7 +12,6 @@ export const withAuth = function(req: any, res: Response, next: NextFunction) {
       req.cookies.token ||
       req.headers['x-forwarded-proto'];
 
-  console.log(req.headers['x-forwarded-proto'])
 
   if (!token) {
     res.status(401).send('Unauthorized: No token provided');
