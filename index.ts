@@ -1,5 +1,4 @@
 import express, { Request, Response} from 'express'
-import expressSession from 'express-session'
 import db from './config/db'
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -9,7 +8,7 @@ const fs = require('fs')
 const PORT: any = process.env.PORT || 8080
 // All the setup for api
 const app: express.Application = express();
-// Initializes the database
+// Initializes the database.
 db();
 
 const corsOptions = {
@@ -20,13 +19,6 @@ const corsOptions = {
   credentials: true,
   exposedHeaders: ["token"]
 }
-app.use(expressSession({
-  secret : 'somesecret',
-  cookie : {
-      secure : true,
-      maxAge: 5184000000
-  }
-}));
 app.enable('trust proxy');
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
