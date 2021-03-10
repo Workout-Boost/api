@@ -9,7 +9,10 @@ export const withAuth = function(req: any, res: Response, next: NextFunction) {
       req.query.token ||
       req.headers['x-access-token'] ||
       req.cookies['token'] ||
-      req.cookies.token;
+      req.cookies.token ||
+      req.headers['x-forwarded-proto'];
+
+  console.log(req.headers['x-forwarded-proto'])
 
   if (!token) {
     res.status(401).send('Unauthorized: No token provided');
