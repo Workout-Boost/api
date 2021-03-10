@@ -1,5 +1,6 @@
 import express, { Request, Response} from 'express'
 import db from './config/db'
+const session = require('express-session')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const path = require('path');
@@ -21,14 +22,23 @@ const corsOptions = {
   exposedHeaders: '*',
 }
 app.set('trust proxy', 1)
-app.options('*', (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-  res.send('ok');
-});
-
-app.use((req, res) => {
-  res.set('Access-Control-Allow-Origin', '*');
-});
+app.use(
+    session({
+      name: 'session',
+      secret: 'secret',
+      resave: true,
+      rolling: true,
+      saveUninitialized: false,
+      proxy: true,
+      unset: "destroy",
+      cookie: {
+        httpOnly: true,
+        path: "/",
+        secure: true,
+        maxAge: 200000
+      }
+    })
+  )  
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
