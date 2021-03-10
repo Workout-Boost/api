@@ -6,6 +6,8 @@ const secret = appSecret;
 export const withAuth = function(req: any, res: Response, next: NextFunction) {
   const token: string = req.cookies.token;
   console.log(req.cookies)
+  console.log(req)
+  console.log(req.headers)
   if (!token) {
     res.status(401).send('Unauthorized: No token provided');
   } else {
