@@ -8,8 +8,9 @@ export const withAuth = function(req: any, res: Response, next: NextFunction) {
       req.body.token ||
       req.query.token ||
       req.headers['x-access-token'] ||
+      req.cookies['token'] ||
       req.cookies.token;
-  console.log(token)
+
   if (!token) {
     res.status(401).send('Unauthorized: No token provided');
   } else {
