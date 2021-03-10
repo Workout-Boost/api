@@ -1,4 +1,5 @@
 import express, { Request, Response} from 'express'
+import session from 'express-session';
 import db from './config/db'
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -19,6 +20,17 @@ const corsOptions = {
   credentials: true,
   exposedHeaders: ["token"]
 }
+app.use(session({
+  name: "session",
+  secret: "yryGGeugidx34otGDuSF5sD9R8g0Gü3r8",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+      path: "/",
+      secure: true,
+      httpOnly: true
+  }
+}));
 app.enable('trust proxy');
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
