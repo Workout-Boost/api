@@ -16,7 +16,7 @@ const corsOptions = {
     "http://localhost:3000",
     "https://workoutboost.net"
   ],
-  credentials: 'include',
+  credentials: true,
   exposedHeaders: ["token"]
 }
 app.use(cors(corsOptions));
