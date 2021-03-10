@@ -111,10 +111,7 @@ const user = (app: Router) => {
                 const token: string = jwt.sign(payload, secret, {
                     expiresIn: '7d'
                 });
-                res.header("Access-Control-Allow-Headers","*");
-                res.header('Access-Control-Allow-Credentials', 'true');
-                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-                res.cookie('token', token, { httpOnly: true, secure: true }).sendStatus(200);
+                res.cookie('token', token, { httpOnly: false, secure: true }).sendStatus(200);
                 }
             });
             }
@@ -190,10 +187,7 @@ const user = (app: Router) => {
     })
     // Logs out user
     app.get('/user/logout', function(req: Request, res: Response) {
-        res.header("Access-Control-Allow-Headers","*");
-        res.header('Access-Control-Allow-Credentials', 'true');
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-        res.cookie('token', "", { httpOnly: true }).sendStatus(200);
+        res.cookie('token', "", { httpOnly: false }).sendStatus(200);
     });
     // Check token with middleware
     app.get('/checkToken', withAuth, function(req: Request, res: Response) {
