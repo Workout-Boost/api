@@ -129,7 +129,7 @@ const posts = (app: Router) => {
                         { $push: {
                             comments: {
                                 commentUid: decoded.id,
-                                username: decoded.username,
+                                username: user.username,
                                 postUid: req.body.postUid,
                                 postId: req.body.postId,
                                 comment: req.body.comment
