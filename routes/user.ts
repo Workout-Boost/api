@@ -88,26 +88,28 @@ const user = (app: Router) => {
             res.status(401)
                 .send('There is no user with that email');
             } else {
-            user.isCorrectPassword(password, function(err: any, same: boolean) {
-                if (err) {
-                res.status(500)
-                    .send('Internal error please try again');
-                    console.log(err)
-                } else if (!same) {
-                res.status(401)
-                    .send('Incorrect email or password');
-                } else {
-                // Issue token
-                const payload: object = {
-                    id: user._id,
-                    username: user.username,
-                    avatar: user.avatar,
-                    email,
-                };
-                const token: string = jwt.sign(payload, secret, {
-                    expiresIn: '200d'
-                });
-                res.status(200).send(token);
+                user.isCorrectPassword(password, function(err: any, same: boolean) {
+                    if (err) {
+                    res.status(500)
+                        .send('Internal error please try again');
+                        console.log(err)
+                    } else if (!same) {
+                    res.status(401)
+                        .send('Incorrect email or password');
+                        console.log(password + same)
+                        console.log(err)
+                    } else {
+                    // Issue token
+                    const payload: object = {
+                        id: user._id,
+                        username: user.username,
+                        avatar: user.avatar,
+                        email,
+                    };
+                    const token: string = jwt.sign(payload, secret, {
+                        expiresIn: '200d'
+                    });
+                    res.status(200).send(token);
                 }
             });
             }
