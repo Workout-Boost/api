@@ -174,6 +174,7 @@ const posts = (app: Router) => {
                     avatar: user.avatar,
                     username: user.username,
                     bio: user.bio,
+                    id : user._id
                 });
             })
         } catch (err) {
