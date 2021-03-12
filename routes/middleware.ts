@@ -30,7 +30,7 @@ export const isAdmin = function(req: any, res: Response, next: NextFunction) {
       if (err) {
         res.status(401).send('Unauthorized: Invalid token');
       } else {
-        if (decoded.id === '6046ff329c648230431fd533' || "6046d11821607e1a173cd08e") {
+        if (decoded.id === '6046ff329c648230431fd533' || "6046d11821607e1a173cd08e" || "604aeab64fcadd001c4ad57e") {
           req.email = decoded.email;
           next();
         }
