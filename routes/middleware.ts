@@ -7,11 +7,11 @@ export const withAuth = function(req: any, res: Response, next: NextFunction) {
   const token: string = req.query.token;
 
   if (!token) {
-    res.status(401).send('Unauthorized: No token provided');
+    res.status(401).send('Unauthorized: You are not logged in');
   } else {
     jwt.verify(token, secret, function(err: any, decoded: any) {
       if (err) {
-        res.status(403).send('Unauthorized: Invalid token');
+        res.status(403).send('Unauthorized: Your session has expired');
       } else {
         req.email = decoded.email;
         next();
