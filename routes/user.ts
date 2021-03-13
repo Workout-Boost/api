@@ -66,7 +66,7 @@ const user = (app: Router) => {
                     transporter.sendMail(mail, function(error: any, info: any){
                         if (error) {
                             console.log(error);
-                            res.status(400).send("Your verification email did not send. Please contact admin@workoutboost.net")
+                            res.status(400).send(`${email} is not an existing email`)
                         } else {
                             res.status(200).send("Registered! Check email for verification step");
                         }
@@ -158,6 +158,56 @@ const user = (app: Router) => {
             return res.status(200).send("Verification Complete!");
         } catch (error) {
             return res.status(500).send('Internal Error, Please try again')
+        }
+    })
+    // Sends email to be able to update password
+    app.get('/user/forgotPass/:email', async (req: Request, res: Response) => {
+        const codes = ['622622', '842248', '101234', '101202'];
+        const code = codes[Math.floor(Math.random() * codes.length)]
+        let {email} = req.params
+        let transporter = mailer.createTransport({
+            service: 'gmail',
+            type: "SMTP",
+            host: "smtp.gmail.com",
+            secure: true,
+            auth: {
+              user: 'no.reply.workoutboost@gmail.com', // make sure this email lesssecure! (https://myaccount.google.com/lesssecureapps)
+              pass: emailPassword
+            }
+        });
+          
+        let mail = {
+            from: 'no.reply.workoutboost@gmail.com',
+            to: email,
+            subject: 'Workout Boost - Forgot Password',
+            html: `<h1>Here's your 6 digit code: ${code}</h1><p>Put code into input box asking for it</p><br/><h2>Here's your forgot password link:</h2><br/><a href="https://workoutboost.net/forgotPass/${email}">Click Here: https://workoutboost.net/forgotPassword</a>`
+          };
+          
+        transporter.sendMail(mail, function(error: any, info: any){
+            if (error) {
+                console.log(error);
+                res.status(400).send(`${email} is not an existing email`)
+            } else {
+                res.status(200).send("Link Sent! Check email to change password");
+            }
+        });
+    })
+    // Updating Password from forgot password
+    app.post('/user/updatePass/:email', async (req: Request, res: Response) => {
+        const codes = ['622622', '842248', '101234', '101202'];
+        if (codes.some(v => req.body.codes === v)) {
+            try {
+                await User.findOneAndUpdate(
+                    { email: req.params.email },
+                    { $set:
+                       {
+                         password: await bcrypt.hash(req.body.password, 10)
+                       }
+                    })
+                return res.status(200).send("Password Updated!");
+            } catch (error) {
+                return res.status(500).send('Internal Error, Please try again')
+            }
         }
     })
     // Get User Id
