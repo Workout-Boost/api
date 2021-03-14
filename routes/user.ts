@@ -164,7 +164,7 @@ const user = (app: Router) => {
     app.get('/user/forgotPass/:email', async (req: Request, res: Response) => {
         const codes = ['622622', '842248', '101234', '101202'];
         const code = codes[Math.floor(Math.random() * codes.length)]
-        let {email} = req.params
+        const {email} = req.params
         let transporter = mailer.createTransport({
             service: 'gmail',
             type: "SMTP",
@@ -195,7 +195,7 @@ const user = (app: Router) => {
     // Updating Password from forgot password
     app.post('/user/updatePass/:email', async (req: Request, res: Response) => {
         const codes = ['622622', '842248', '101234', '101202'];
-        if (codes.some(v => req.body.codes === v)) {
+        if (codes.some(v => req.body.code === v)) {
             try {
                 await User.findOneAndUpdate(
                     { email: req.params.email },
@@ -208,6 +208,8 @@ const user = (app: Router) => {
             } catch (error) {
                 return res.status(500).send('Internal Error, Please try again')
             }
+        } else {
+            return res.status(500).send('Code Incorrect!')
         }
     })
     // Get User Id
