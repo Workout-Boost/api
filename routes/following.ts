@@ -20,6 +20,13 @@ const following = (app: Router) => {
                     following: req.body.userId
                 }
             }).exec();
+            // Add follower to user following
+            await User.updateOne(
+                { _id: req.body.userId },
+                { $push: {
+                    followers: decoded.id
+                }
+            }).exec();
             // Checks who user is following
             await User.findById(decoded.id, function(err: any, user: any) {
                 res.status(200).json(user.following)
@@ -64,7 +71,7 @@ const following = (app: Router) => {
         }
     })
     // Unfollow user
-    app.delete('/following/:userId', withAuth, async (req: Request, res: Response) => {
+    app.delete('/unfollow/:userId', withAuth, async (req: Request, res: Response) => {
         const token: any = req.query.token; 
         
         const decoded: any = jwt.verify(token, appSecret);
@@ -77,9 +84,54 @@ const following = (app: Router) => {
                     following: req.params.userId
                 }
             }).exec();
+            // Remove follower to user following
+            await User.updateOne(
+                { _id: req.params.userId },
+                { $pull: {
+                    followers: decoded.id
+                }
+            }).exec();
             // Checks who user is following
             await User.findById(decoded.id, function(err: any, user: any) {
                 res.status(200).json(user.following)
+            })
+        } catch (error) {
+            res.status(500).send('Internal Error, Please try again')
+        }
+    })
+    // Following List
+    app.get('/followingList', withAuth, async (req: Request, res: Response) => {
+        const token: any = req.query.token;
+        
+        const decoded: any = jwt.verify(token, appSecret);
+
+        try {
+            User.findById(decoded.id, function(err: any, user: any) {
+                User.find({_id:{$in:user.following}})
+                .then(
+                    (resp: object)=> {
+                        res.status(200).json(resp)
+                    }
+                )
+            })
+        } catch (error) {
+            res.status(500).send('Internal Error, Please try again')
+        }
+    })
+    // Followers List
+    app.get('/followersList', withAuth, async (req: Request, res: Response) => {
+        const token: any = req.query.token;
+        
+        const decoded: any = jwt.verify(token, appSecret);
+
+        try {
+            User.findById(decoded.id, function(err: any, user: any) {
+                User.find({_id:{$in:user.followers}})
+                .then(
+                    (resp: object)=> {
+                        res.status(200).json(resp)
+                    }
+                )
             })
         } catch (error) {
             res.status(500).send('Internal Error, Please try again')

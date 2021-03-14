@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
   bio: { type: String, required: true },
   avatar: { type: String},
   following: { type: Array},
+  followers: { type: Array},
   saved: { type: Array },
   savedByOthers: { type: Number },
   shared: { type: Number },
