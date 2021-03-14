@@ -180,7 +180,7 @@ const user = (app: Router) => {
             from: 'no.reply.workoutboost@gmail.com',
             to: email,
             subject: 'Workout Boost - Forgot Password',
-            html: `<h1>Here's your 6 digit code: ${code}</h1><p>Put code into input box asking for it</p><br/><h2>Here's your forgot password link:</h2><br/><a href="https://workoutboost.net/forgotPass/${email}">Click Here: https://workoutboost.net/forgotPassword</a>`
+            html: `<h1>Here's your 6 digit code: ${code}</h1><p>Put code into input box asking for it</p><br/><h2>Here's your forgot password link:</h2><br/><a href="https://workoutboost.net/update-password/${email}">Click Here: https://workoutboost.net/forgotPassword</a>`
           };
           
         transporter.sendMail(mail, function(error: any, info: any){
